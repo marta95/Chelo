@@ -1,0 +1,5 @@
+(defturtle stefan)
+
+(move-forward stefan 45)
+
+(say "hello there")
