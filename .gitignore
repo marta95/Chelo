@@ -79,3 +79,7 @@ $RECYCLE.BIN/
 *.lnk
 
 .idea/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile

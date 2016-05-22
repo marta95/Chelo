@@ -5,49 +5,56 @@
 #include <iostream>
 #include <deque>
 
-#include "Source.h.h"
+#include "Source.h"
 #include "AST.h"
+
+//class AST::Form;
 
 class Program
 {
-	std::vector<std::shared_ptr<AST::Form>> instructionList;
+//    std::vector<std::shared_ptr<AST::Form>> instructionList;
 
-	public:
-		Program() :
-			instructionList()
-		{
+    std::shared_ptr<AST::Form> program;
 
-		}
+    public:
+        Program()
+        {
 
-		Program &addForm(std::shared_ptr<AST::Form> &form)
-		{
-			instructionList.push_back(form);
-			return *this;
-		}
+        }
+
+        void setProgram(std::shared_ptr<AST::Form> &program)
+        {
+            this->program = program;
+        }
+
+        std::shared_ptr<AST::Form> getProgram()
+        {
+            return this->program;
+        }
 };
 
 enum class ParserState {
-	                     IN_WHITESPACE,
-	                     IN_NAME_LITERAL,
+                         IN_WHITESPACE,
+                         IN_NAME_LITERAL,
                          IN_INTEGER_LITERAL,
-						 IN_STRING_LITERAL
+                         IN_STRING_LITERAL
                        };
 class Parser
 {
-	std::regex const MATCH_WHITESPACE{R"(\s+)"},
-					 MATCH_OPEN_PARENTHESIS{R"(\()"},
-					 MATCH_CLOSE_PARENTHESIS{R"(\))"},
-					 MATCH_OPEN_LIST{R"(\[)"},
-					 MATCH_CLOSE_LIST{R"(\])"},
-					 MATCH_NAME_FIRST_CHARACTER{R"([a-zA-Z])"},
-					 MATCH_NAME_REST_CHARACTER{R"([a-zA-Z0-9\-])"},
-					 MATCH_INTEGER_LITERAL_CHARACTER{R"(\d)"},
-					 MATCH_STRING_LITERAL_QUOTE{R"(")"},
+    std::regex const MATCH_WHITESPACE{R"(\s+)"},
+                     MATCH_OPEN_PARENTHESIS{R"(\()"},
+                     MATCH_CLOSE_PARENTHESIS{R"(\))"},
+                     MATCH_OPEN_LIST{R"(\[)"},
+                     MATCH_CLOSE_LIST{R"(\])"},
+                     MATCH_NAME_FIRST_CHARACTER{R"([a-zA-Z])"},
+                     MATCH_NAME_REST_CHARACTER{R"([a-zA-Z0-9\-])"},
+                     MATCH_INTEGER_LITERAL_CHARACTER{R"(\d)"},
+                     MATCH_STRING_LITERAL_QUOTE{R"(")"},
                      MATCH_LINE_END{R"(\n)"};
 
-	std::shared_ptr<Source> source;
-	std::shared_ptr<Program> program;
-	ParserState state;
+    std::shared_ptr<Source> source;
+    std::shared_ptr<Program> program;
+    ParserState state;
     std::string accumulator;
     unsigned int column, line;
     std::deque<std::shared_ptr<AST::Form>> formStack;
@@ -213,29 +220,29 @@ class Parser
         return implicitToplevelDo;
     }
 
-	std::shared_ptr<Program> parse()
-	{
-		auto newProgram = std::make_shared<Program>();
-		state = ParserState::IN_WHITESPACE;
-		accumulator = "";
+    std::shared_ptr<Program> parse()
+    {
+        auto newProgram = std::make_shared<Program>();
+        state = ParserState::IN_WHITESPACE;
+        accumulator = "";
         column = line = 1;
         formStack.clear();
 
         formStack.push_back(makeImplicitDo());
 
-		while (true) {
-			auto optionalCharacter = source->readChar();
-			if (optionalCharacter) {
-				auto character = optionalCharacter.value();
+        while (true) {
+            auto optionalCharacter = source->readChar();
+            if (optionalCharacter) {
+                auto character = optionalCharacter.value();
                 std::shared_ptr<AST::Form> form;
                 line++;
 
-				switch (state) {
-					case ParserState::IN_WHITESPACE:      form = parse_whitespace(character); break;
-					case ParserState::IN_NAME_LITERAL:    form = parse_name(character);       break;
-					case ParserState::IN_INTEGER_LITERAL: form = parse_integer(character);    break;
-					case ParserState::IN_STRING_LITERAL:  form = parse_string(character);     break;
-				}
+                switch (state) {
+                    case ParserState::IN_WHITESPACE:      form = parse_whitespace(character); break;
+                    case ParserState::IN_NAME_LITERAL:    form = parse_name(character);       break;
+                    case ParserState::IN_INTEGER_LITERAL: form = parse_integer(character);    break;
+                    case ParserState::IN_STRING_LITERAL:  form = parse_string(character);     break;
+                }
 
                 if (std::regex_match(character, MATCH_LINE_END)) {
                     column++;
@@ -245,29 +252,31 @@ class Parser
                 if (form) {
                     std::cout << "GOT FORM: " << form->to_str() << std::endl;
                 }
-			} else {
-				break;
-			}
-		}
+            } else {
+                break;
+            }
+        }
 
         std::cout << "Final program: " << formStack.back()->to_str() << std::endl;
 
-		return newProgram;
-	}
+        newProgram->setProgram(formStack.back());
 
-	public:
-		Parser(std::shared_ptr<Source> source) :
-			source(source), program(nullptr)
-		{
+        return newProgram;
+    }
 
-		}
+    public:
+        Parser(std::shared_ptr<Source> source) :
+            source(source), program(nullptr)
+        {
 
-		std::shared_ptr<Program> getProgram()
-		{
-			if (!program) {
-				program = parse();
-			}
+        }
 
-			return program;
-		}
+        std::shared_ptr<Program> getProgram()
+        {
+            if (!program) {
+                program = parse();
+            }
+
+            return program;
+        }
 };

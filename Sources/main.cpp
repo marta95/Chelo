@@ -1,23 +1,25 @@
 #include <iostream>
 #include <memory>
 #include <regex>
-
 #include <fstream>
-#include "Source.h.h"
+
+#include "Source.h"
 #include "Parser.h"
+#include "Interpreter.h"
 
-int main()\
+int main(int argc, char *argv[])
 {
-	std::shared_ptr<Source> source = std::make_shared<FileSource>("C:\\Users\\Marta\\Documents\\projekt_z_cpp\\Chelo\\test.che");
-	Parser parser(source);
+    std::shared_ptr<Source> source = std::make_shared<FileSource>(argv[1]);
+    Parser parser(source);
 
-	try {
-		parser.getProgram();
-	} catch (std::runtime_error exception) {
-		std::cout << "U DUN GOOF'D: " << exception.what() << std::endl;
-	}
-	
-	system("pause");
+    try {
+        auto program = parser.getProgram();
+        auto interpreter = new Interpreter(program);
+
+        interpreter->interpret();
+    } catch (std::exception exception) {
+        std::cout << "U DUN GOOF'D: " << exception.what() << std::endl;
+    }
 
     return 0;
 }

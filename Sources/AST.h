@@ -2,6 +2,13 @@
 
 #include <sstream>
 #include <vector>
+#include <iterator>
+#include <functional>
+#include <algorithm>
+#include <memory>
+
+#include "IVisitor.h"
+#include "IVisitable.h"
 
 namespace AST {
     std::string join(std::vector<std::string> vector, std::string separator="")
@@ -30,11 +37,11 @@ namespace AST {
         return output;
     };
 
-	class Form {
+    class Form : public IVisitable {
     protected:
         std::vector <std::shared_ptr<Form>> elements;
 
-	public:
+    public:
         Form() :
             elements({})
         {
@@ -46,20 +53,30 @@ namespace AST {
             elements.push_back(element);
         }
 
-        virtual std::string to_str() = 0;
-	};
+        std::vector<std::shared_ptr<Form>> &getElements()
+        {
+            return elements;
+        }
 
-	class List : public Form {
-	public:
+        virtual std::string to_str() = 0;
+    };
+
+    class List : public Form {
+    public:
         std::string to_str()
         {
            return "(" + join(mapDerp<std::string, std::shared_ptr<Form>>(elements, [](auto form) {
                                return form->to_str();
                              }), " ") + ")";
         }
-	};
 
-	class NameLiteral : public Form {
+        std::shared_ptr<Value> acceptVisitor(IVisitor &visitor)
+        {
+            return visitor.visit(*this);
+        }
+    };
+
+    class NameLiteral : public Form {
     public:
         const std::string &getName() const {
             return name;
@@ -71,24 +88,34 @@ namespace AST {
 
     private:
         std::string name;
-	public:
+    public:
         std::string to_str()
         {
             return name;
         }
-	};
 
-	class Vector : public Form {
-	public:
+        std::shared_ptr<Value> acceptVisitor(IVisitor &visitor)
+        {
+            return visitor.visit(*this);
+        }
+    };
+
+    class Vector : public Form {
+    public:
         std::string to_str()
         {
             return "[" + join(mapDerp<std::string, std::shared_ptr<Form>>(elements, [](auto form) {
                 return form->to_str();
             }), " ") + "]";
         }
-	};
 
-	class StringLiteral : public Form {
+        std::shared_ptr<Value> acceptVisitor(IVisitor &visitor)
+        {
+            return visitor.visit(*this);
+        }
+    };
+
+    class StringLiteral : public Form {
     public:
         const std::string &getText() const {
             return text;
@@ -100,14 +127,19 @@ namespace AST {
 
     private:
         std::string text;
-	public:
+    public:
         std::string to_str()
         {
             return "\"" + text + "\"";
         }
-	};
 
-	class IntegerLiteral : public Form {
+        std::shared_ptr<Value> acceptVisitor(IVisitor &visitor)
+        {
+            return visitor.visit(*this);
+        }
+    };
+
+    class IntegerLiteral : public Form {
     public:
         int getValue() const {
             return value;
@@ -117,12 +149,17 @@ namespace AST {
             IntegerLiteral::value = value;
         }
 
+        std::shared_ptr<Value> acceptVisitor(IVisitor &visitor)
+        {
+            return visitor.visit(*this);
+        }
+
     private:
         int value;
-	public:
+    public:
         std::string to_str()
         {
             return std::to_string(value);
         }
-	};
+    };
 }

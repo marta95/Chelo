@@ -5,7 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 include_directories(Sources)
 
-set(SOURCE_FILES Sources/main.cpp Sources/Source.h.h Sources/AST.h Sources/Parser.h Sources/optional.h)
+set(SOURCE_FILES Sources/main.cpp Sources/Source.h Sources/AST.h Sources/Parser.h Sources/optional.h Sources/Interpreter.h Sources/IVisitable.cpp Sources/IVisitable.h Sources/IVisitor.cpp Sources/IVisitor.h)
 add_executable(SFMLtest ${SOURCE_FILES})
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake_modules")

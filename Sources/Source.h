@@ -1,8 +1,9 @@
 #pragma once
 
-#include "optional.h"
+// #include "optional.h"
 #include <fstream>
 #include <string>
+#include <experimental/optional>
 
 using namespace std::experimental;
 
@@ -18,7 +19,7 @@ class FileSource : public Source
 
     public:
         FileSource(std::string filename) :
-                file(filename)
+            file(filename)
         {
 
         }
