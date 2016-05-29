@@ -1,25 +1,20 @@
-#include <iostream>
 #include <memory>
-#include <regex>
-#include <fstream>
+#include <iostream>
 
-#include "Source.h"
-#include "Parser.h"
-#include "Interpreter.h"
+#include "Sources/Source.h"
+#include "Lexer/Lexer.h"
 
 int main(int argc, char *argv[])
 {
-    std::shared_ptr<Source> source = std::make_shared<FileSource>(argv[1]);
-    Parser parser(source);
+    std::shared_ptr<Sources::Source> source = std::make_shared<Sources::FileSource>(argv[1]);
 
-    try {
-        auto program = parser.getProgram();
-        auto interpreter = new Interpreter(program);
+    Lexer::Lexer lexer(source);
 
-        interpreter->interpret();
-    } catch (std::exception exception) {
-        std::cout << "U DUN GOOF'D: " << exception.what() << std::endl;
+    for (auto token : *lexer.getTokens()) {
+        std::cout << token.toString() << std::endl;
     }
+
+    system("PAUSE");
 
     return 0;
 }
