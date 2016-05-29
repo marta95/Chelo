@@ -97,6 +97,8 @@ namespace Lexer
 
     std::shared_ptr<std::vector<Token>> Lexer::getTokens()
     {
+        if (tokens) return tokens;
+
         tokens = std::make_shared<std::vector<Token>>();
         currentTokenContent = "";
         currentTokenType = TokenType::Unknown;
@@ -130,7 +132,7 @@ namespace Lexer
                         currentTokenContent += character;
                     }
    
-                 continue                        ;
+                 continue;
                 }
 
                 if (newTokenType != currentTokenType || isSeparator(newTokenType)) {

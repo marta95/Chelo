@@ -6,7 +6,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 include_directories(Sources)
 
 set(SOURCE_FILES Sources/main.cpp Sources/Sources/Source.h Sources/Sources/Source.cpp Sources/Utilities/optional.h
-                 Sources//Lexer/Lexer.h Sources/Lexer/Lexer.cpp)
+                 Sources/Lexer/Lexer.h Sources/Lexer/Lexer.cpp Sources/Parser/Parser.h Sources/Parser/Parser.cpp
+                 Sources/Parser/AST/AST.h Sources/Parser/AST/AST.cpp Sources/Parser/Parselets/Parselets.h
+                 Sources/Parser/Parselets/Parselets.cpp)
 
 add_executable(SFMLtest ${SOURCE_FILES})
 

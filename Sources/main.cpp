@@ -3,6 +3,7 @@
 
 #include "Sources/Source.h"
 #include "Lexer/Lexer.h"
+#include "Parser/Parser.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +14,12 @@ int main(int argc, char *argv[])
     for (auto token : *lexer.getTokens()) {
         std::cout << token.toString() << std::endl;
     }
+
+    Parser::CheloParser parser(lexer.getTokens());
+
+    auto ast = parser.parse();
+
+    std::cout << ast->toString() << std::endl;
 
     system("PAUSE");
 

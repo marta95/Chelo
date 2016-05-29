@@ -5,6 +5,7 @@
 #include <set>
 #include <string>
 #include <regex>
+#include <exception>
 
 #include "../Sources/Source.h"
 
