@@ -1,5 +1,7 @@
 #include "AST.h"
 
+#include "PrettyPrintVisitor.h"
+
 #include <sstream>
 
 namespace Parser
@@ -17,6 +19,28 @@ namespace Parser
             return name;
         }
 
+        StringLiteralNode::StringLiteralNode(std::string content) :
+            Node(), content(content)
+        {
+
+        }
+
+        std::string StringLiteralNode::toString()
+        {
+            return content;
+        }
+
+        NumberLiteralNode::NumberLiteralNode(double value) :
+            Node(), value(value)
+        {
+
+        }
+
+        std::string NumberLiteralNode::toString()
+        {
+            return std::to_string(value);
+        }
+
         CallNode::CallNode(std::shared_ptr<Node> functionName,
                            std::shared_ptr<std::vector<std::shared_ptr<Node>>> parameters) :
             Node(), functionName(functionName), parameters(parameters)
@@ -29,13 +53,9 @@ namespace Parser
             std::stringstream stringRepresentation("");
 
             stringRepresentation << "(" << functionName->toString();
-            
-            if (parameters->size() > 0) {
-                stringRepresentation << std::endl;
-            }
 
             for (auto parameter : *parameters) {
-                stringRepresentation << "  " << parameter->toString() << std::endl;
+                stringRepresentation << std::endl << "  " << parameter->toString();
             }
 
             stringRepresentation << ")";

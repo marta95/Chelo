@@ -8,7 +8,7 @@ include_directories(Sources)
 set(SOURCE_FILES Sources/main.cpp Sources/Sources/Source.h Sources/Sources/Source.cpp Sources/Utilities/optional.h
                  Sources/Lexer/Lexer.h Sources/Lexer/Lexer.cpp Sources/Parser/Parser.h Sources/Parser/Parser.cpp
                  Sources/Parser/AST/AST.h Sources/Parser/AST/AST.cpp Sources/Parser/Parselets/Parselets.h
-                 Sources/Parser/Parselets/Parselets.cpp)
+                 Sources/Parser/Parselets/Parselets.cpp Sources/Parser/AST/Visitor.h Sources/Parser/AST/PrettyPrintVisitor.h)
 
 add_executable(SFMLtest ${SOURCE_FILES})
 

@@ -20,13 +20,13 @@ namespace Parser
 
             do
             {
-                auto optionalExpression(parser.parseExpression());
+                auto optionalExpression = parser.parseExpression();
                 if (optionalExpression) {
                     parameters->push_back(optionalExpression.value());
                 } else {
                     throw std::runtime_error("Unexpected end of form starting at: " + openParenToken.toString());
                 }
-            } while ((parser.match(Lexer::TokenType::CloseParen, ")")));
+            } while (!(parser.match(Lexer::TokenType::CloseParen, ")")));
 
             parser.consume(Lexer::TokenType::CloseParen, ")");
 
@@ -44,6 +44,13 @@ namespace Parser
             auto nameOptional = parser.consume(Lexer::TokenType::Name);
 
             return make_optional<std::shared_ptr<AST::Node>>(std::make_shared<AST::NameLiteralNode>(nameOptional.content));
+        }
+
+        optional<std::shared_ptr<AST::Node>> StringParselet::parse(::Parser::Parser &parser)
+        {
+            auto nameOptional = parser.consume(Lexer::TokenType::String);
+
+            return make_optional<std::shared_ptr<AST::Node>>(std::make_shared<AST::StringLiteralNode>(nameOptional.content));
         }
     }
 }

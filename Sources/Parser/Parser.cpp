@@ -95,14 +95,12 @@ namespace Parser
             auto token = optionalToken.value();
             auto parselet = getParselet(token);
 
-            parselet->parse(*this);
-
-//            if (parselet != nullptr) {
-//                return parselet->parse(*this);
-//            }
-//            else {
-//                throw std::runtime_error("Can't parse token: " + token.toString());
-//            }
+            if (parselet != nullptr) {
+                return parselet->parse(*this);
+            }
+            else {
+                throw std::runtime_error("n't parse token: " + token.toString());
+            }
         }
         else {
             // throw std::runtime_error("Unexpected end of tokens.");
@@ -140,5 +138,6 @@ namespace Parser
         this->registerParselet(Lexer::TokenType::OpenParen, "(", std::make_shared<Parselets::CallParselet>());
         this->registerParselet(Lexer::TokenType::Comment, std::make_shared<Parselets::CommentParselet>());
         this->registerParselet(Lexer::TokenType::Name, std::make_shared<Parselets::NameParselet>());
+        this->registerParselet(Lexer::TokenType::String, std::make_shared<Parselets::StringParselet>());
     }
 }

@@ -4,6 +4,7 @@
 #include "Sources/Source.h"
 #include "Lexer/Lexer.h"
 #include "Parser/Parser.h"
+#include "Parser/AST/PrettyPrintVisitor.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,8 +21,9 @@ int main(int argc, char *argv[])
 
         auto ast = parser.parse();
 
-        std::cout << ast->toString() << std::endl;
+        Parser::AST::PrettyPrintVisitor ppVisitor;
 
+        ast->acceptVisitor(ppVisitor);
     }
     catch (std::runtime_error e) {
         std::cout << "U DUN GOOF'D: " << e.what() << std::endl;

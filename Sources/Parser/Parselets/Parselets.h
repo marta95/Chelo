@@ -37,5 +37,11 @@ namespace Parser
         public:
             optional<std::shared_ptr<AST::Node>> parse(::Parser::Parser &parser);
         };
+
+        class StringParselet : public Parselet
+        {
+        public:
+            optional<std::shared_ptr<AST::Node>> parse(::Parser::Parser &parser);
+        };
     }
 }
