@@ -13,54 +13,35 @@ namespace Parser {
                 }
         };
 
-        template<typename ResultT, typename VisitableT>
-        class Visitor
-        {
-            public:
-                virtual ResultT visit(VisitableT &) = 0;
-        };
+        template <typename ResultT, typename VisitableT> class Visitor;
 
-        template <typename ResultT>
+        template <typename ResultT, typename VisitableT>
         class Visitable
         {
             public:
-                // typedef Re
-                virtual ~Visitable()
+                virtual ~Visitable() {};
+                virtual ResultT acceptVisitor(VisitorBase &visitor)
                 {
-
-                }
-
-                ResultT acceptVisitor(::Parser::AST::VisitorBase &visitor)
-                {
-                    throw std::runtime_error("sth wrong");
+                    VisitableT *castThis = static_cast<VisitableT *>(this);
+                    return __acceptVisitor(*castThis, visitor);
                 }
 
             protected:
-                template <class VisitedT>
-                ResultT dupa(VisitedT &visited, ::Parser::AST::VisitorBase &visitor)
+                static ResultT __acceptVisitor(VisitableT &visitable, VisitorBase &visitor)
                 {
-                    if (Visitor<ResultT, VisitedT> *p = dynamic_cast<Visitor<ResultT, VisitedT> *> (&visitor))
-                    {
-                        return p->visit(visited);
+                    auto castVisitor = dynamic_cast<Visitor<ResultT, VisitableT> *>(&visitor);
+                    if (castVisitor) {
+                        return castVisitor->visit(visitable);
                     }
                     throw std::runtime_error("sth wrong");
                 }
         };
 
-
-        // template<typename T>
-        // class IVisitor {
-        //     public:
-        //         virtual T visit(NameLiteralNode &) =0;
-        //         virtual T visit(StringLiteralNode &) =0;
-        //         virtual T visit(NumberLiteralNode &) =0;
-        //         virtual T visit(CallNode &) =0;
-        // };
-
-        // template<typename T>
-        // class IVisitable {
-        //     public:
-        //         virtual T acceptVisitor(IVisitor<T> &) = 0;
-        // };
+        template <typename ResultT, typename VisitableT>
+        class Visitor // : virtual public VisitorBase
+        {
+            public:
+                virtual ResultT visit(VisitableT &visitable) = 0;
+        };
     }
 }
