@@ -19,17 +19,19 @@ int main(int argc, char *argv[])
 
         Parser::CheloParser parser(lexer.getTokens());
 
-        auto ast = parser.parse();
+        auto ast = std::dynamic_pointer_cast<Parser::AST::CallNode>(parser.parse());
 
         Parser::AST::PrettyPrintVisitor ppVisitor;
 
-        ast->acceptVisitor(ppVisitor);
+        ast->acceptVisitor(&ppVisitor);
     }
     catch (std::runtime_error e) {
         std::cout << "U DUN GOOF'D: " << e.what() << std::endl;
+        throw e;
     }
     catch (std::exception e) {
         std::cout << "ULTIMATE FAIL: " << e.what() << std::endl;
+        throw e;
     }
 
     int dummy;

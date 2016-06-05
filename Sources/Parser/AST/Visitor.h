@@ -2,46 +2,25 @@
 
 #include "AST.h"
 
-namespace Parser {
-    namespace AST {
-        class VisitorBase
+namespace Parser
+{
+    namespace AST
+    {
+        // class NameLiteralNode;
+        // class StringLiteralNode;
+        // class NumberLiteralNode;
+        // class CallNode;
+
+        class Node;
+
+        class VoidVisitor
         {
             public:
-                virtual ~VisitorBase()
-                {
-
-                }
-        };
-
-        template <typename ResultT, typename VisitableT> class Visitor;
-
-        template <typename ResultT, typename VisitableT>
-        class Visitable
-        {
-            public:
-                virtual ~Visitable() {};
-                virtual ResultT acceptVisitor(VisitorBase &visitor)
-                {
-                    VisitableT *castThis = static_cast<VisitableT *>(this);
-                    return __acceptVisitor(*castThis, visitor);
-                }
-
-            protected:
-                static ResultT __acceptVisitor(VisitableT &visitable, VisitorBase &visitor)
-                {
-                    auto castVisitor = dynamic_cast<Visitor<ResultT, VisitableT> *>(&visitor);
-                    if (castVisitor) {
-                        return castVisitor->visit(visitable);
-                    }
-                    throw std::runtime_error("sth wrong");
-                }
-        };
-
-        template <typename ResultT, typename VisitableT>
-        class Visitor // : virtual public VisitorBase
-        {
-            public:
-                virtual ResultT visit(VisitableT &visitable) = 0;
+                virtual void visit(Node *) = 0;
+                // virtual void visit(NameLiteralNode *) = 0;
+                // virtual void visit(StringLiteralNode *) = 0;
+                // virtual void visit(NumberLiteralNode *) = 0;
+                // virtual void visit(CallNode *) = 0;
         };
     }
 }

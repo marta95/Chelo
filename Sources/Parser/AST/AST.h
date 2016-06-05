@@ -10,25 +10,18 @@ namespace Parser
 {
     namespace AST
     {
-        struct Node : public Visitable<int, Node>
+        struct Node// : public VoidVisitable<PrettyPrintVisitor>
         {
             public:
                 virtual std::string toString() = 0;
                 virtual std::vector<std::shared_ptr<Node>> getChildren() = 0;
-                // int acceptVisitor(VisitorBase &v) override
-                // {
-                //     // dupa(*this, v);
-                //     return 12;
-                // }
-
-                // int acceptVisitor(VisitorBase &visitor)
-                // {
-                //     // throw std::runtime_error("sth wrong");
-                //     return 12;
-                // }                
+                virtual void acceptVisitor(VoidVisitor *visitor)
+                {
+                    visitor->visit(this);
+                }
         };
 
-        struct NameLiteralNode : public Node, public Visitable<int, NameLiteralNode>
+        struct NameLiteralNode : public Node // , public Visitable<int, NameLiteralNode>
         {
                 std::string name;
 
@@ -39,9 +32,13 @@ namespace Parser
                 {
                     return std::vector<std::shared_ptr<Node>>();
                 }
+                // void acceptVisitor(PrettyPrintVisitor *visitor) override
+                // {
+                //     visitor->visit(this);
+                // }
         };
 
-        struct StringLiteralNode : public Node, public Visitable<int, StringLiteralNode>
+        struct StringLiteralNode : public Node // , public Visitable<int, StringLiteralNode>
         {
                 std::string content;
 
@@ -52,9 +49,13 @@ namespace Parser
                 {
                     return std::vector<std::shared_ptr<Node>>();
                 }
+                // void acceptVisitor(PrettyPrintVisitor *visitor) override
+                // {
+                //     visitor->visit(this);
+                // }
         };
 
-        struct NumberLiteralNode : public Node, public Visitable<int, NumberLiteralNode>
+        struct NumberLiteralNode : public Node // , public Visitable<int, NumberLiteralNode>
         {
                 double value;
 
@@ -65,9 +66,13 @@ namespace Parser
                 {
                     return std::vector<std::shared_ptr<Node>>();
                 }
+                // void acceptVisitor(PrettyPrintVisitor *visitor) override
+                // {
+                //     visitor->visit(this);
+                // }
         };
 
-        struct CallNode : public Node, public Visitable<int, CallNode>
+        struct CallNode : public Node // , public Visitable<int, CallNode>
         {
                 std::shared_ptr<Node> functionName;
                 std::shared_ptr<std::vector<std::shared_ptr<Node>>> parameters;
@@ -80,6 +85,10 @@ namespace Parser
                 CallNode(std::shared_ptr<Node> functionName,
                          std::shared_ptr<std::vector<std::shared_ptr<Node>>> parameters);
                 std::string toString() override;
+                // void acceptVisitor(PrettyPrintVisitor *visitor) override
+                // {
+                //     visitor->visit(this);
+                // }
         };
     }
 }
