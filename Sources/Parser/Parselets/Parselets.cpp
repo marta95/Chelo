@@ -33,10 +33,17 @@ namespace Parser
             return make_optional<std::shared_ptr<AST::Node>>(std::make_shared<AST::CallNode>(functionNameOptional.value(), parameters));
         }
 
-        optional<std::shared_ptr<AST::Node>> parse(::Parser::Parser &parser)
+        optional<std::shared_ptr<AST::Node>> CommentParselet::parse(::Parser::Parser &parser)
         {
             parser.consume(Lexer::TokenType::Comment);
             return nullopt;
+        }
+
+        optional<std::shared_ptr<AST::Node>> NameParselet::parse(::Parser::Parser &parser)
+        {
+            auto nameOptional = parser.consume(Lexer::TokenType::Name);
+
+            return make_optional<std::shared_ptr<AST::Node>>(std::make_shared<AST::NameLiteralNode>(nameOptional.content));
         }
     }
 }

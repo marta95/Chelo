@@ -20,14 +20,19 @@ namespace Parser
     {
             std::shared_ptr<std::vector<Lexer::Token>> tokens;
             std::shared_ptr<AST::Node> parsedAST = nullptr;
-            std::map<std::tuple<Lexer::TokenType, std::string>, std::shared_ptr<Parselets::Parselet>> parseletMap;
+            std::map<Lexer::TokenType, std::shared_ptr<Parselets::Parselet>> genericParseletMap;
+            std::map<std::tuple<Lexer::TokenType, std::string>, std::shared_ptr<Parselets::Parselet>> specificParseletMap;
 
             int position = 0;
             std::experimental::optional<Lexer::Token> peekToken();
+            std::shared_ptr<Parselets::Parselet> getParselet(Lexer::Token token);
 
         public:
             Parser(std::shared_ptr<std::vector<Lexer::Token>> tokens);
-            Parser &registerParselet(std::tuple<Lexer::TokenType, std::string> id, std::shared_ptr<Parselets::Parselet> parselet);
+            Parser &registerParselet(Lexer::TokenType tokenType,
+                                     std::shared_ptr<Parselets::Parselet> parselet);
+            Parser &registerParselet(Lexer::TokenType tokenType, std::string content,
+                                     std::shared_ptr<Parselets::Parselet> parselet);
             std::shared_ptr<AST::Node> parse();
             bool match(Lexer::TokenType tokenType, std::string tokenContent = "");
             std::experimental::optional<std::shared_ptr<AST::Node>> parseExpression();
