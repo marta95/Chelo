@@ -18,15 +18,14 @@ namespace Parser
                 throw std::runtime_error("Call form " + openParenToken.toString() + " requires at least one form.");
             }
 
-            do
-            {
+            while (!(parser.match(Lexer::TokenType::CloseParen, ")"))) {
                 auto optionalExpression = parser.parseExpression();
                 if (optionalExpression) {
                     parameters->push_back(optionalExpression.value());
                 } else {
                     throw std::runtime_error("Unexpected end of form starting at: " + openParenToken.toString());
                 }
-            } while (!(parser.match(Lexer::TokenType::CloseParen, ")")));
+            }
 
             parser.consume(Lexer::TokenType::CloseParen, ")");
 
@@ -67,8 +66,7 @@ namespace Parser
 
             auto elements = std::make_shared<std::vector<std::shared_ptr<AST::Node>>>();
 
-            do
-            {
+            while (!(parser.match(Lexer::TokenType::CloseParen, "]"))) {
                 auto optionalExpression = parser.parseExpression();
                 if (optionalExpression) {
                     elements->push_back(optionalExpression.value());
@@ -76,7 +74,7 @@ namespace Parser
                 else {
                     throw std::runtime_error("Unexpected end of form starting at: " + openParenToken.toString());
                 }
-            } while (!(parser.match(Lexer::TokenType::CloseParen, "]")));
+            };
 
             parser.consume(Lexer::TokenType::CloseParen, "]");
 

@@ -29,7 +29,7 @@ namespace Lexer
         if (tokenType == TokenType::OpenParen)      return true;
         if (tokenType == TokenType::CloseParen)     return true;
         // if (tokenType == TokenType::Name)           return true;
-        if (tokenType == TokenType::Number)         return true;
+        // if (tokenType == TokenType::Number)         return true;
         if (tokenType == TokenType::Newline)        return true;
         if (tokenType == TokenType::Whitespace)     return true;
         if (tokenType == TokenType::Comment)        return true;
@@ -47,8 +47,9 @@ namespace Lexer
         if (character == STRING_CHARACTER) return TokenType::String;
         if (character == READER_DISPATCH) return TokenType::ReaderDispatch;
         if (std::regex_match(character, NAME_FIRST_CHARACTER)) return TokenType::Name;
-        if (std::regex_match(character, NAME_NEXT_CHARACTER)) return TokenType::Name;
         if (std::regex_match(character, NUMBER_FIRST_CHARACTER)) return TokenType::Number;
+        if (std::regex_match(character, NUMBER_NEXT_CHARACTER)) return TokenType::Number;
+        // if (std::regex_match(character, NAME_NEXT_CHARACTER)) return TokenType::Name;
         if (std::regex_match(character, NEWLINE_CHARACTER)) return TokenType::Newline;
         if (std::regex_match(character, WHITESPACE_CHARACTER)) return TokenType::Whitespace;
 

@@ -1,0 +1,23 @@
+(defturtle turtle-name) ;; register the turtle
+
+(move-forward! turtle-name length)
+
+(move-backwards! turtle-name length)
+
+(rotate-left! turtle-name degrees)
+
+(rotate-right! turtle-name degrees)
+
+(pen-on! turtle-name)
+
+(pen-off! turtle-name)
+
+(pen-color! turtle-name predefined-color-name) ; "red" "green" "blue"
+
+(pen-size! turtle-name pixel-size)
+
+(loop ...) ; loop forever
+
+(sleep miliseconds) ; halts interpreter loop for miliseconds ms
+
+(clear!) ; clears the screen

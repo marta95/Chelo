@@ -8,7 +8,12 @@ include_directories(Sources)
 set(SOURCE_FILES Sources/main.cpp Sources/Sources/Source.h Sources/Sources/Source.cpp Sources/Utilities/optional.h
                  Sources/Lexer/Lexer.h Sources/Lexer/Lexer.cpp Sources/Parser/Parser.h Sources/Parser/Parser.cpp
                  Sources/Parser/AST/AST.h Sources/Parser/AST/AST.cpp Sources/Parser/Parselets/Parselets.h
-                 Sources/Parser/Parselets/Parselets.cpp Sources/Parser/AST/Visitor.h Sources/Parser/AST/PrettyPrintVisitor.h Sources/Parser/AST/PrettyPrintVisitor.cpp)
+                 Sources/Parser/Parselets/Parselets.cpp Sources/Parser/AST/Visitor.h Sources/Parser/AST/PrettyPrintVisitor.h Sources/Parser/AST/PrettyPrintVisitor.cpp Sources/Interpreter/Interpreter.h Sources/Interpreter/Interpreter.cpp
+                 Sources/Interpreter/InterpreterState.h Sources/Interpreter/InterpreterState.cpp Sources/Interpreter/Stack.h
+                 Sources/Interpreter/Stack.cpp Sources/Interpreter/InterpreterValue.h Sources/Interpreter/InterpreterValue.cpp
+                 Sources/Utilities/ReverseContainer.h Sources/Interpreter/InterpreterVisitor.h
+                 Sources/Interpreter/InterpreterVisitor.cpp Sources/Turtle/Turtle.h
+                 Sources/Turtle/Turtle.cpp)
 
 add_executable(SFMLtest ${SOURCE_FILES})
 

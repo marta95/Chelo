@@ -5,6 +5,12 @@
 #include <string>
 
 #include "Visitor.h"
+// #include "../../Interpreter/InterpreterValue.h"
+
+namespace Interpreter
+{
+    struct InterpreterValue;
+}
 
 namespace Parser
 {
@@ -18,6 +24,10 @@ namespace Parser
                 virtual void acceptVisitor(Visitor<void, Node> *visitor)
                 {
                     visitor->visit(this);
+                }
+                virtual std::shared_ptr<Interpreter::InterpreterValue> acceptVisitor(Visitor<std::shared_ptr<Interpreter::InterpreterValue>, Node> *visitor)
+                {
+                    return visitor->visit(this);
                 }
         };
 

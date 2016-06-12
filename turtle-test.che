@@ -1,0 +1,10 @@
+(defturtle stefan)
+
+(defn something []
+  (move-forward! stefan 20)
+  (rotate! stefan 90)
+  (move-backwards! stefan 30))
+
+(loop
+  (something)
+  (sleep 200))

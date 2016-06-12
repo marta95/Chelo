@@ -1,4 +1,12 @@
-(say
-  (str "hello world"
-       (head [1 2 3 (+ 2 2)])
-       (add 40 2)))
+(defturtle "house-turtle")
+
+(move-forward! house-turtle 40)
+(rotate-left!  house-turtle 45)
+(move-forward! house-turtle 40)
+(rotate-left!  house-turtle 90)
+(move-forward! house-turtle 40)
+(rotate-left!  house-turtle 45)
+(move-forward! house-turtle 40)
+(rotate-left!  house-turtle 90)
+(move-forward! house-turtle (* 1.41 40))
+(rotate-left!  house-turtle 90)

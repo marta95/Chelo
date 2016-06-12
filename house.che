@@ -1,0 +1,17 @@
+(defturtle "house-turtle")
+
+(pen-size! house-turtle 2)
+(pen-colour! house-turtle "green")
+
+(loop
+  (move-forward! house-turtle 40)
+  (rotate-left! 45)
+  (move-forward! house-turtle 40)
+  (rotate-left! 90)
+  (move-forward! house-turtle 40)
+  (rotate-left! 45)
+  (move-forward! house-turtle 40)
+  (rotate-left! 90)
+  (move-forward! house-turtle (* 1.41 40))
+  (rotate-left! 90)
+  (sleep 1500))
