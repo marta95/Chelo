@@ -15,7 +15,8 @@ namespace Parser {
             return padString.str();
         }
 
-        PrettyPrintVisitor::PrettyPrintVisitor()
+        PrettyPrintVisitor::PrettyPrintVisitor() :
+            depth(0)
         {
 
         }
@@ -42,6 +43,11 @@ namespace Parser {
 
                 this->__visit(derp);
             }
+            else if (dynamic_cast<VectorNode *>(whatever)) {
+                VectorNode *derp = dynamic_cast<VectorNode *>(whatever);
+
+                this->__visit(derp);
+            }
             else {
                 throw std::runtime_error("ugh");
             }
@@ -64,7 +70,7 @@ namespace Parser {
 
         void PrettyPrintVisitor::__visit(CallNode *call)
         {
-            std::cout << pad() << "(";
+            std::cout << "(";
         
             call->functionName->acceptVisitor(this);
 
@@ -78,6 +84,21 @@ namespace Parser {
             depth--;
 
             std::cout << ")";
+        }
+
+        void PrettyPrintVisitor::__visit(VectorNode *vector) {
+            std::cout << "[";
+
+            depth++;
+
+            for (auto parameter : vector->getChildren()) {
+                std::cout << std::endl << pad();
+                parameter->acceptVisitor(this);
+            }
+
+            depth--;
+
+            std::cout << "]";
         }
     }
 }

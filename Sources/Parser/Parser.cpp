@@ -139,5 +139,6 @@ namespace Parser
         this->registerParselet(Lexer::TokenType::Comment, std::make_shared<Parselets::CommentParselet>());
         this->registerParselet(Lexer::TokenType::Name, std::make_shared<Parselets::NameParselet>());
         this->registerParselet(Lexer::TokenType::String, std::make_shared<Parselets::StringParselet>());
+        this->registerParselet(Lexer::TokenType::OpenParen, "[", std::make_shared<Parselets::VectorParselet>());
     }
 }

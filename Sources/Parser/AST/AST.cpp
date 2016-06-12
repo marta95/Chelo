@@ -14,10 +14,10 @@ namespace Parser
 
         }
 
-        std::string NameLiteralNode::toString()
-        {
-            return name;
-        }
+        // std::string NameLiteralNode::toString()
+        // {
+        //     return name;
+        // }
 
         StringLiteralNode::StringLiteralNode(std::string content) :
             Node(), content(content)
@@ -25,10 +25,10 @@ namespace Parser
 
         }
 
-        std::string StringLiteralNode::toString()
-        {
-            return content;
-        }
+        // std::string StringLiteralNode::toString()
+        // {
+        //     return content;
+        // }
 
         NumberLiteralNode::NumberLiteralNode(double value) :
             Node(), value(value)
@@ -36,10 +36,10 @@ namespace Parser
 
         }
 
-        std::string NumberLiteralNode::toString()
-        {
-            return std::to_string(value);
-        }
+        // std::string NumberLiteralNode::toString()
+        // {
+        //     return std::to_string(value);
+        // }
 
         CallNode::CallNode(std::shared_ptr<Node> functionName,
                            std::shared_ptr<std::vector<std::shared_ptr<Node>>> parameters) :
@@ -48,19 +48,25 @@ namespace Parser
 
         }
 
-        std::string CallNode::toString()
+        // std::string CallNode::toString()
+        // {
+        //     std::stringstream stringRepresentation("");
+
+        //     stringRepresentation << "(" << functionName->toString();
+
+        //     for (auto parameter : *parameters) {
+        //         stringRepresentation << std::endl << "  " << parameter->toString();
+        //     }
+
+        //     stringRepresentation << ")";
+
+        //     return stringRepresentation.str();
+        // }
+
+        VectorNode::VectorNode(std::shared_ptr<std::vector<std::shared_ptr<Node>>> elements) :
+            elements(elements)
         {
-            std::stringstream stringRepresentation("");
 
-            stringRepresentation << "(" << functionName->toString();
-
-            for (auto parameter : *parameters) {
-                stringRepresentation << std::endl << "  " << parameter->toString();
-            }
-
-            stringRepresentation << ")";
-
-            return stringRepresentation.str();
         }
     }
 }

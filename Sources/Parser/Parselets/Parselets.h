@@ -34,14 +34,26 @@ namespace Parser
 
         class NameParselet : public Parselet
         {
-        public:
-            optional<std::shared_ptr<AST::Node>> parse(::Parser::Parser &parser);
+            public:
+                optional<std::shared_ptr<AST::Node>> parse(::Parser::Parser &parser);
         };
 
         class StringParselet : public Parselet
         {
-        public:
-            optional<std::shared_ptr<AST::Node>> parse(::Parser::Parser &parser);
+            public:
+                optional<std::shared_ptr<AST::Node>> parse(::Parser::Parser &parser);
+        };
+
+        class NumberParselet : public Parselet
+        {
+            public:
+                optional<std::shared_ptr<AST::Node>> parse(::Parser::Parser &parser);
+        };
+
+        class VectorParselet : public Parselet
+        {
+            public:
+                optional<std::shared_ptr<AST::Node>> parse(::Parser::Parser &parser);
         };
     }
 }

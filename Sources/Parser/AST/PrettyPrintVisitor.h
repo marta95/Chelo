@@ -8,7 +8,7 @@
 
 namespace Parser {
     namespace AST {
-        class PrettyPrintVisitor : public VoidVisitor
+        class PrettyPrintVisitor : public Visitor<void, Node>
         {
                 int depth;
                 std::string prefix = "  ";
@@ -18,12 +18,13 @@ namespace Parser {
             public:
                 PrettyPrintVisitor();
 
-                void visit(Node *);
+                void visit(Node *) override;
 
                 void __visit(NameLiteralNode *nameLiteral);
                 void __visit(StringLiteralNode *stringLiteral);
                 void __visit(NumberLiteralNode *numberLiteral);
                 void __visit(CallNode *call);
+                void __visit(VectorNode *vector);
         };
     }
 }
