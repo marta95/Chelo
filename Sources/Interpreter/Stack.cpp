@@ -25,7 +25,8 @@ namespace Interpreter
     Stack::Stack() :
         stack()
     {
-        stack.push_back(StackFrame());
+        stack.push_back(StackFrame()); // top level frame
+        stack.push_back(StackFrame()); // first stack frame
     }
 
     Stack &Stack::enterFrame()
@@ -41,11 +42,17 @@ namespace Interpreter
         return *this;
     }
 
+    Stack &Stack::assignToToplevelName(std::string &name, std::shared_ptr<InterpreterValue> value)
+    {
+        stack.front().assignToName(name, value);
+        return *this;
+    }
+
     Stack &Stack::assignToName(std::string &name, std::shared_ptr<InterpreterValue> value)
     {
         stack.back().assignToName(name, value);
         return *this;
-    }    
+    }
 
     optional<std::shared_ptr<InterpreterValue>> Stack::lookup(std::string &name)
     {

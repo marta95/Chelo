@@ -1,12 +1,43 @@
 (defturtle "house-turtle")
+(defturtle "green-house-turtle")
+(set* "sleep-time" 100)
+(set* "house-side-length" 20)
 
-(move-forward! house-turtle 40)
-(rotate-left!  house-turtle 45)
-(move-forward! house-turtle 40)
-(rotate-left!  house-turtle 90)
-(move-forward! house-turtle 40)
-(rotate-left!  house-turtle 45)
-(move-forward! house-turtle 40)
-(rotate-left!  house-turtle 90)
-(move-forward! house-turtle (* 1.41 40))
-(rotate-left!  house-turtle 90)
+(pen-colour! green-house-turtle "blue")
+
+(pen-size! house-turtle 2)
+(pen-size! green-house-turtle 2)
+
+(while
+  (move-forward! house-turtle
+                 house-side-length)
+  (rotate-right! house-turtle 45)
+  (move-forward! house-turtle
+                 house-side-length)
+  (rotate-right! house-turtle 90)
+  (move-forward! house-turtle
+                 house-side-length)
+  (rotate-right! house-turtle 45)
+  (move-forward! house-turtle
+                 house-side-length)
+  (rotate-right! house-turtle 91)
+  (move-forward! house-turtle (* 1.41 house-side-length))
+
+  (set* "green-house-side-length" (* house-side-length 1.1))
+
+  (move-forward! green-house-turtle
+                 green-house-side-length)
+  (rotate-right! green-house-turtle 45)
+  (move-forward! green-house-turtle
+                 green-house-side-length)
+  (rotate-right! green-house-turtle 90)
+  (move-forward! green-house-turtle
+                 green-house-side-length)
+  (rotate-right! green-house-turtle 45)
+  (move-forward! green-house-turtle
+                 green-house-side-length)
+  (rotate-right! green-house-turtle 89)
+  (move-forward! green-house-turtle (* 1.41 green-house-side-length))
+
+  (set* "house-side-length" (* house-side-length 1.05))
+  (sleep! sleep-time))

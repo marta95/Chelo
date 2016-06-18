@@ -6,14 +6,17 @@
 #include "../Parser/AST/Visitor.h"
 #include "../Parser/AST/AST.h"
 
-#include "InterpreterState.h"
-
 namespace Interpreter {
+    struct InterpreterValue;
+    class InterpreterState;
+
     class InterpreterVisitor : public Parser::AST::Visitor<std::shared_ptr<InterpreterValue>, Parser::AST::Node>
     {
-            InterpreterState &interpreterState;
+            // InterpreterState &interpreterState;
 
         public:
+            InterpreterState &interpreterState;
+
             InterpreterVisitor(InterpreterState &);
 
             std::shared_ptr<InterpreterValue> visit(Parser::AST::Node *) override;

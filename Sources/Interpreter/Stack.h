@@ -29,6 +29,7 @@ namespace Interpreter
             Stack();
             Stack &enterFrame();
             Stack &exitFrame();
+            Stack &assignToToplevelName(std::string &name, std::shared_ptr<InterpreterValue> value);
             Stack &assignToName(std::string &name, std::shared_ptr<InterpreterValue> value);
             optional<std::shared_ptr<InterpreterValue>> lookup(std::string &name);
     };

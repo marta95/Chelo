@@ -6,7 +6,15 @@ namespace Interpreter
     {
         // TODO add assignment to toplevel frame;
         auto functionValue = std::make_shared<BuiltInFunctionValue>(std::list<std::string>(), function);
-        stack.assignToName(name, functionValue);
+        stack.assignToToplevelName(name, functionValue);
+        return *this;
+    }
+
+    InterpreterState &InterpreterState::registerMacro(std::string name, BuiltInMacro function)
+    {
+        // TODO add assignment to toplevel frame;
+        auto functionValue = std::make_shared<BuiltInMacroValue>(std::list<std::string>(), function);
+        stack.assignToToplevelName(name, functionValue);
         return *this;
     }
 

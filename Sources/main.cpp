@@ -71,26 +71,22 @@ int main(int argc, char *argv[])
                 window.close();
         }
 
-        {
-            auto turtles = interpreter->getTurtles();
+        auto turtles = interpreter->getTurtles();
 
-            for (auto pair : turtles) {
-                auto turtle = pair.second;
+        for (auto pair : turtles) {
+            auto turtle = pair.second;
 
-                for (auto line : turtle->getLines()) {
+            turtle->withLines([&](auto &lines) {
+                for (auto &line : lines) {
                     window.draw(line);
                 }
-            }
+            });
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
         window.display();
     }
-
-    int dummy;
-
-    std::cin >> dummy;
 
     return 0;
 }

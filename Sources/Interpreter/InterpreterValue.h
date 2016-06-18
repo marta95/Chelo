@@ -8,13 +8,19 @@
 #include "../Parser/AST/AST.h"
 #include "../Turtle/Turtle.h"
 
+#include "InterpreterVisitor.h"
+
 namespace Interpreter
 {
     class InterpreterState;
 
     typedef std::shared_ptr<InterpreterValue> FunctionResult;
     typedef std::list<std::shared_ptr<InterpreterValue>> FunctionParameters;
-    typedef std::function<FunctionResult (InterpreterState &, FunctionParameters)> BuiltInFunction;
+    typedef std::function<FunctionResult(InterpreterVisitor *, FunctionParameters)> BuiltInFunction;
+
+    typedef std::shared_ptr<Parser::AST::Node> MacroResult;
+    typedef std::list<std::shared_ptr<Parser::AST::Node>> MacroParameters;
+    typedef std::function<MacroResult(InterpreterState &, MacroParameters)> BuiltInMacro;
 
     struct InterpreterValue
     {
@@ -25,13 +31,14 @@ namespace Interpreter
     struct NilValue : public InterpreterValue
     {
         public:
-            std::string stringRepr() { return "nil";  }
+            std::string stringRepr();
     };
 
     struct FunctionValue : public InterpreterValue
     {
         public:
-            virtual std::shared_ptr<InterpreterValue> call(InterpreterState &state, FunctionParameters params) = 0;
+            FunctionResult call(InterpreterVisitor *visitor);
+            virtual FunctionResult call(InterpreterVisitor *visitor, FunctionParameters params) = 0;
     };
 
     struct UserDefinedFunctionValue : public FunctionValue
@@ -41,21 +48,10 @@ namespace Interpreter
 
         public:
             UserDefinedFunctionValue(std::list<std::string> paramNames,
-                                     std::shared_ptr<Parser::AST::Node> expression) :
-                paramNames(paramNames), expression(expression)
-            {
+                                     std::shared_ptr<Parser::AST::Node> expression);
+            std::string stringRepr();
 
-            }
-
-            std::string stringRepr()
-            {
-                return "(fn ...)";
-            }
-
-            std::shared_ptr<InterpreterValue> call(InterpreterState &state, FunctionParameters params)
-            {
-                throw std::runtime_error("NOT IMPLEMENTED YET");
-            }
+            FunctionResult call(InterpreterVisitor *visitor, FunctionParameters params);
     };
 
     struct BuiltInFunctionValue : public FunctionValue
@@ -65,21 +61,23 @@ namespace Interpreter
 
         public:
             BuiltInFunctionValue(std::list<std::string> paramNames,
-                                 BuiltInFunction function) :
-                paramNames(paramNames), function(function)
-            {
+                                 BuiltInFunction function);
+            std::string stringRepr();
+            FunctionResult call(InterpreterVisitor *visitor, FunctionParameters params);
+    };
 
-            }
+    struct BuiltInMacroValue : public InterpreterValue
+    {
+        std::list<std::string> paramNames;
+        BuiltInMacro function;
 
-            std::string stringRepr()
-            {
-                return "(#native ...)";
-            }
+    public:
+        BuiltInMacroValue(std::list<std::string> paramNames,
+                          BuiltInMacro function);
 
-            std::shared_ptr<InterpreterValue> call(InterpreterState &state, FunctionParameters params)
-            {
-                return function(state, params);
-            }
+        std::string stringRepr();
+
+        MacroResult call(InterpreterState &state, MacroParameters params);
     };
 
     struct StringValue : public InterpreterValue
@@ -87,16 +85,9 @@ namespace Interpreter
             std::string value;
 
         public:
-            StringValue(std::string value) :
-                value(value)
-            {
+            StringValue(std::string value);
 
-            }
-
-            std::string stringRepr()
-            {
-                return value;
-            }
+            std::string stringRepr();
     };
 
     struct NumberValue : public InterpreterValue
@@ -104,63 +95,35 @@ namespace Interpreter
             double value;
 
         public:
-            NumberValue(double value) :
-                value(value)
-            {
+            NumberValue(double value);
 
-            }
-
-            std::string stringRepr()
-            {
-                return std::to_string(value);
-            }
+            std::string stringRepr();
     };
 
     struct VectorValue : public InterpreterValue
     {
             std::list<std::shared_ptr<InterpreterValue>> vector;
         public:
-            VectorValue(std::list<std::shared_ptr<InterpreterValue>> vector) :
-                vector(vector)
-            {
+            VectorValue(std::list<std::shared_ptr<InterpreterValue>> vector);
 
-            }
-
-            std::string stringRepr()
-            {
-                auto stringStream = std::stringstream("");
-
-                stringStream << "[";
-
-                for (auto value : vector) {
-                    stringStream << value->stringRepr() << " ";
-                }
-
-                stringStream << "]";
-
-                return stringStream.str();
-            }
+            std::string stringRepr();
     };
 
     struct TurtleValue : public InterpreterValue
     {
             std::shared_ptr<Turtle::Turtle > turtle;
         public:
-            TurtleValue(std::shared_ptr<Turtle::Turtle> turtle) :
-                turtle(turtle)
-            {
+            TurtleValue(std::shared_ptr<Turtle::Turtle> turtle);
 
-            }
+            TurtleValue &moveForward(double lineLength)   ;
+            TurtleValue &moveBackwards(double lineLength) ;
+            TurtleValue &rotateLeft(double degrees)       ;
+            TurtleValue &rotateRight(double degrees)      ;
+            TurtleValue &penOn()                          ;
+            TurtleValue &penOff()                         ;
+            TurtleValue &penColour(std::string newColour) ;
+            TurtleValue &penSize(double pixelSize)        ;
 
-            TurtleValue &moveForward(double lineLength)   { turtle->moveForward(lineLength); return *this; }
-            TurtleValue &moveBackwards(double lineLength) { turtle->moveBackwards(lineLength); return *this; }
-            TurtleValue &rotateLeft(double degrees)       { turtle->rotateLeft(degrees); return *this; }
-            TurtleValue &rotateRight(double degrees)      { turtle->rotateRight(degrees); return *this; }
-            TurtleValue &penOn()                          { turtle->penOn(); return *this; }
-            TurtleValue &penOff()                         { turtle->penOff(); return *this; }
-            TurtleValue &penColour(std::string newColour) { turtle->penColour(newColour); return *this; }
-            TurtleValue &penSize(double pixelSize)        { turtle->penSize(pixelSize); return *this; }
-
-            std::string stringRepr() { return "turtle"; }
+            std::string stringRepr();
     };
 }

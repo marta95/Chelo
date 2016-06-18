@@ -80,6 +80,11 @@ namespace Parser
                 }
 
             // public:
+                CallNode(std::shared_ptr<Node> functionName) :
+                    CallNode(functionName, std::make_shared<std::vector<std::shared_ptr<Parser::AST::Node>>>())
+                {
+
+                }
                 CallNode(std::shared_ptr<Node> functionName,
                          std::shared_ptr<std::vector<std::shared_ptr<Node>>> parameters);
                 // std::string toString() override;

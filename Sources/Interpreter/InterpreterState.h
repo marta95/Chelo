@@ -8,8 +8,8 @@
 #include <mutex>
 
 #include "Stack.h"
-#include "InterpreterValue.h"
 #include "../Turtle/Turtle.h"
+#include "InterpreterValue.h"
 
 namespace Interpreter
 {
@@ -22,6 +22,7 @@ namespace Interpreter
             Stack stack;
             std::istream &inputStream;
             std::ostream &outputStream;
+            unsigned int gensymCounter = 0;
 
         public:
             InterpreterState() :
@@ -49,7 +50,18 @@ namespace Interpreter
                 }
             }
 
+            std::string gensym(std::string prefix = "")
+            {
+                if (prefix.size() > 0) {
+                    return prefix + "-" + std::to_string(gensymCounter++);
+                }
+                else {
+                    return "gensym-" + std::to_string(gensymCounter++);
+                }
+            }
+
             InterpreterState &registerToplevelFunction(std::string name, BuiltInFunction function);
+            InterpreterState &InterpreterState::registerMacro(std::string name, BuiltInMacro function);
 
             /*InterpreterState &enterFrame();
             InterpreterState &exitFrame();*/

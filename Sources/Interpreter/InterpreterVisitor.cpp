@@ -1,5 +1,7 @@
 #include "InterpreterVisitor.h"
 
+#include "InterpreterState.h"
+
 namespace Interpreter {
     InterpreterVisitor::InterpreterVisitor(InterpreterState &interpreterState) :
         interpreterState(interpreterState)
@@ -65,20 +67,34 @@ namespace Interpreter {
         // auto result = std::make_shared<Interpreter::NilValue>();
         auto functionNameResult = call->functionName->acceptVisitor(this);
 
-        auto castFunctionName = std::dynamic_pointer_cast<FunctionValue>(functionNameResult);
+        auto castFunction = std::dynamic_pointer_cast<FunctionValue>(functionNameResult);
+        auto castMacro = std::dynamic_pointer_cast<BuiltInMacroValue>(functionNameResult);
 
-        auto parameters = std::make_shared<FunctionParameters>();
-            
-        for (auto param : *call->parameters) {
-            auto result = param->acceptVisitor(this);
-            parameters->push_back(result);
+        if (castFunction) {
+            auto parameters = std::make_shared<FunctionParameters>();
+
+            for (auto param : *call->parameters) {
+                auto result = param->acceptVisitor(this);
+                parameters->push_back(result);
+            }
+
+            return castFunction->call(this, *parameters);
         }
+        else if (castMacro) {
+            auto parameters = std::make_shared<MacroParameters>();
 
-        if (castFunctionName) {
-            return castFunctionName->call(interpreterState, *parameters);
+            for (auto param : *call->parameters) {
+                parameters->push_back(param);
+            }
+
+            auto macroResult = castMacro->call(interpreterState, *parameters);
+
+            auto macroEvaluationResult = macroResult->acceptVisitor(this);
+
+            return macroEvaluationResult;
         }
         else {
-            throw std::runtime_error("Expected a function, got: " + functionNameResult->stringRepr());
+            throw std::runtime_error("Expected a function or macro, got: " + functionNameResult->stringRepr());
         }
     }
 

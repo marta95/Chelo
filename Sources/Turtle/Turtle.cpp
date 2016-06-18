@@ -13,6 +13,9 @@ namespace Turtle {
         line.setPosition(position);
         line.rotate(static_cast<float>(rotation));
         line.setFillColor(colour);
+
+        std::lock_guard<std::mutex> guard(linesMutex);
+
         lines.push_back(line);
     }
 
@@ -91,8 +94,17 @@ namespace Turtle {
         return *this;
     }
 
-    std::vector<sf::RectangleShape> Turtle::getLines()
+    std::list<sf::RectangleShape> &Turtle::getLines()
     {
+        std::lock_guard<std::mutex> guard(linesMutex);
+
         return lines;
+    }
+
+    void Turtle::withLines(std::function<void(std::list<sf::RectangleShape> &)> fun)
+    {
+        std::lock_guard<std::mutex> guard(linesMutex);
+
+        fun(lines);
     }
 }
